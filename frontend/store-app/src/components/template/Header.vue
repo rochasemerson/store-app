@@ -1,20 +1,24 @@
 <template>
   <header class="header">
-    <a href="/">
+    <router-link to="/">
       <img src="@/assets/drink.jpg" alt="drink" />
-    </a>
+    </router-link>
     <h1 class="title">
       {{ title }}
     </h1>
+    <UserDropdown v-if="!hideUserDropdown"/>
   </header>
 </template>
 
 <script>
+import UserDropdown from './UserDropdown'
+
 export default {
   name: "Header",
+  components: { UserDropdown },
   props: {
     title: String,
-    hideToggle: Boolean,
+    hideUserDropdown: Boolean,
   }
 };
 </script>
@@ -31,7 +35,7 @@ export default {
 }
 
 .title {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   flex-grow: 1;
   text-align: center;
 }

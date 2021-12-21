@@ -1,9 +1,9 @@
 <template>
   <div id='app'>
-    <Header title="Store App" :hideToggle="false"/>
+    <Header title="Store App" :hideUserDropdown="false"/>
     <Menu></Menu>
     <Content></Content>
-    <Footer></Footer>
+    <Footer/>
   </div>
 </template>
 

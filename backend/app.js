@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const connectDB = require('./db/connect')
 const products = require('./routes/products')
 const categories = require('./routes/categories')
@@ -8,6 +9,7 @@ require('dotenv').config()
 
 // middlewares
 app.use(express.json())
+app.use(cors())
 
 // routes
 app.use('/api/products', products)

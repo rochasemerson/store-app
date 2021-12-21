@@ -20,6 +20,10 @@ const ClientSchema = new mongoose.Schema ({
         type: mongoose.Mixed,
         required: [true, 'Senha não informada']
     },
+    admin: {
+        type: Boolean,
+        required: [true, 'Informe se usuário é administrador']
+    },
     address: String,
     address_number: Number,
     area: String,
