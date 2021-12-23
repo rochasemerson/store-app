@@ -4,7 +4,7 @@ const cors = require('cors')
 const connectDB = require('./db/connect')
 const products = require('./routes/products')
 const categories = require('./routes/categories')
-const clients = require('./routes/clients')
+const users = require('./routes/users')
 require('dotenv').config()
 
 // middlewares
@@ -14,7 +14,7 @@ app.use(cors())
 // routes
 app.use('/api/products', products)
 app.use('/api/categories', categories)
-app.use('/api/clients', clients)
+app.use('/api/users', users)
 
 const start = async () => {
     try {

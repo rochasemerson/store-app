@@ -2,6 +2,7 @@ import {createWebHistory, createRouter} from 'vue-router'
 
 import Home from '@/components/home/Home'
 import AdminPages from '@/components/admin/AdminPages'
+import ByCategory from '@/components/home/ByCategory'
 
 
 const routes = [{
@@ -12,6 +13,10 @@ const routes = [{
     name: 'adminPages',
     path: '/admin',
     component: AdminPages
+}, {
+    name: 'byCategory',
+    path: '/category/:cat',
+    component: ByCategory
 }]
 
 const router = createRouter ({

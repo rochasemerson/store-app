@@ -8,7 +8,9 @@ const productSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: [true, 'Preço não informado']
+        get: value => (value/100).toFixed(2),
+        set: value => value*100,
+        required: [true, 'Preço não informado'],  
     },
     stock: {
         type: Number,
@@ -18,7 +20,9 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Categoria não informada']
     },
-    profit: Number
+    profit: Number,
 })
+
+productSchema.set('toJSON', {getters: true})
 
 module.exports = mongoose.model('Product', productSchema)

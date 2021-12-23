@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <PageTitle icon="fa fa-home" main="Seja Bem Vindo" sub="Ofertas" />
-    <div class="homeProducts" v-for="(product, index) in stat" :key='product.id'>
+    <PageTitle main="Frios" sub="" />
+    <div class="homeProducts" v-for="(categoryProductList, index) in categoryProductList" :key='categoryProductList.id'>
       <HomeProducts
-        :name="product.description"
-        :price="product.price"
+        :name="categoryProductList.description"
+        :price="categoryProductList.price"
         :picture_url="imgSources[index]"
       />
     </div>
@@ -23,14 +23,14 @@ export default {
     components: { PageTitle, HomeProducts },
     data: function () {
         return {
-            stat: {},
+            categoryProductList: {},
             imgSources
         }
     },
     methods: {
         getProductInfo() {
-            axios.get(`${baseApiUrl}/api/products`)
-                .then(res => this.stat = (res.data.products.slice(0,6)))
+            axios.get(`${baseApiUrl}/api/products/category/2`)
+            .then(res => this.categoryProductList = (res.data.categoryProductList))
     }
 },
     mounted() {

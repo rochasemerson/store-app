@@ -14,6 +14,10 @@ export default {
 </script>
 
 <style>
+    .page-title {
+        grid-area: title;
+    }
+
     .page-title h1 {
         margin: 0px;
     }
