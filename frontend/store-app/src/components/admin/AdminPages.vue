@@ -8,15 +8,15 @@
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link active" href="#" @click="currentTab">Produtos</a>
-        <ProductControl />
+        <ProductControl v-if="isActive=='Produtos'"/>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#" @click="currentTab">Usuários</a>
-        <UserControl />
+        <UserControl v-if="isActive=='Usuários'"/>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#" @click="currentTab">Categorias</a>
-        <CategoryControl />
+        <CategoryControl v-if="isActive=='Categorias'"/>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"
@@ -35,9 +35,6 @@ import CategoryControl from "./CategoryControl";
 
 export default {
   name: "AdminPages",
-  props: {
-    activeTab: Boolean
-  },
   components: { PageTitle, ProductControl, UserControl, CategoryControl },
   methods: {
     currentTab: function (event) {
@@ -46,15 +43,9 @@ export default {
         links[i].classList.remove('active')
         event.target.classList.add("active")
       }
+        this.isActive = event.target.textContent
     },
-  },
-  // computed: {
-  //   active () {
-  //     {
-  //       return this.activeTab = !this.activeTab
-  //     }
-  //   }
-  // }
+  }
 };
 </script>
 

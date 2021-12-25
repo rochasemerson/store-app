@@ -1,36 +1,15 @@
 <template>
     <aside class="menu">
-        <div v-for="(category) in categories" :key='category.code'>
-            <CategoryList 
-                :description='category.description'     
-            />
-        </div>        
+            <CategoryList />
     </aside>
 </template>
 
 <script>
-import axios from "axios";
-import { baseApiUrl } from "@/global";
 import CategoryList from "../home/CategoryList";
 
 export default {
   name: "Menu",
-  components: { CategoryList },
-  data: function () {
-    return {
-      categories: {},
-    };
-  },
-  methods: {
-    getCategories() {
-      axios
-        .get(`${baseApiUrl}/api/categories`)
-        .then((res) => (this.categories = res.data.categoryList));
-    }
-  },
-  mounted() {
-    this.getCategories();
-  },
+  components: { CategoryList }
 };
 </script>
 

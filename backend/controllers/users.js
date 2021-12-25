@@ -1,5 +1,4 @@
 const User = require('../models/Users')
-const errorHandler = User.validate
 
 const getAllUsers = async (req, res) => {
     try {
@@ -45,39 +44,42 @@ const createUser = async (req, res) => {
             res.status(400).json({ msg: 'Email já cadastrado' })
         } else {
             const user = await User.create(req.body)
-            res.status(200).send(`User ${req.body.name} cadastrado com sucesso`)
+            res.status(200).send(`Usuário ${req.body.name} cadastrado(a) com sucesso`)
         }
-    } catch (error) {        
-        res.status(500).send(error)
+    } catch (error) {     
+        let errorList = error.message
+        errorList = errorList.match(/\<(.*?)\>/mg)
+        res.status(500).send(errorList)
     }
 }
 
 const updateUser = async (req, res) => {
     try {
         const { id: userID } = req.params
-        const user = await user.findOneAndUpdate({ _id: userID }, req.body, {
+        const user = await User.findOneAndUpdate({ _id: userID }, req.body, {
             new: true,
             runValidators: true
         })
         if (!user) {
             res.status(404).send({ msg: `Nenhum Usuário com o id: ${userID}` })
         }
-        res.status(200).send(`Usuário ${user} alterado com sucesso`)
+        res.status(200).send(`Usuário ${user.name} alterado com sucesso`)
     } catch (error) {
-        res.status(500).send(error.message)
+        errorList = error.message.split('-')
+        res.status(500).send(errorList)
     }
 }
 
 const deleteUser = async (req, res) => {
     try {
-        const { id: userID } = req.params
-        const user = await user.findOneAndDelete({ _id: userID })
-        if (!user) {
-            res.status(404).send({ msg: `Nenhum Usuário com o id: ${userID}` })
+        const { _id: userID } = req.params
+        const user = await User.findOneAndDelete(userID)
+        if (!userID) {
+            res.status(404).send(`Usuário não encontrado`)
         }
-        res.status(200).send(`Usuário ${user} deletado com sucesso`)
+        res.status(200).send(`Usuário ${user.name} deletado com sucesso`)
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send('Ocorreu um erro tente novamente')
     }
 }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="category-control">
-        <h4>Categoria</h4>
+        <h4>teste</h4>
     </div>
 </template>
 
