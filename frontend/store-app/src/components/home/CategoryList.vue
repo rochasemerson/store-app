@@ -1,8 +1,9 @@
 <template>
-<div>
-  <ul v-for="(category) in categories" :key="category.code">
-    <!-- <router-link :to='url' >{{ description }}</router-link> -->
-    <li>{{category.name}}</li>
+<div class="category-list">
+  <ul v-for="(category) in categoryList" :key="category.description">
+    <li @click="onNodeSelect(category.code)">
+      {{ category.description }}
+    </li>
   </ul>
 </div>
 </template>
@@ -15,21 +16,22 @@ export default {
   name: "CategoryList",
   data: function () {
     return {
-      categories: [],
-      categoryList: []
+      categoryList: {}
     }
   },
   methods: {
     getCategories() {
       axios  
         .get(`${baseApiUrl}/api/categories`)
-        .then(res => this.categories = res.data.categoryList)
-        // .then(console.log(this.categories))
-        // .get(`${baseApiUrl}/api/categories`)
-        // .then(res => res.data.categoryList.forEach(cat => {
-        //     this.categoryList.push(cat.code)
-        //     console.log(this.categoryList)
-        // }))
+        .then(res => {
+          this.categoryList = res.data.categoryList
+        })
+    },
+    onNodeSelect(value) {
+      this.$router.push({
+        name: 'byCategory',
+        params: { code: value }
+      })
     },
   },
   mounted() {
@@ -39,7 +41,13 @@ export default {
 </script>
 
 <style>
-ul {
+.category-list ul {
   list-style: none;
+  cursor: pointer;
 }
+
+.category-list ul:hover {
+  background-color: blanchedalmond;
+}
+
 </style>

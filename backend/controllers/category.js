@@ -10,17 +10,37 @@ const getCategories = async (req, res) => {
     }
 }
 
+const getSingleCategory = async (req, res) => {
+    try {
+        const catCode = req.params.code
+        const singleCategory = await Category.findOne({ code: catCode })
+        if (!singleCategory) {
+            res.status(404).json('Categoria não encontrada')
+        } else {
+            res.status(200).json(singleCategory)
+        }
+    } catch (error) {
+        res.status(500).send("Ocorreu um erro tente novamente")
+    }
+}
+
 const createCategory = async (req, res) => {
-    const categoryList = await Category.find({})
-    let exist = false
+    try {
+        const categoryList = await Category.find({})
+        let exist = false
         categoryList.map(category => {
             category.code == req.body.code || category.description == req.body.description ? exist = true : exist = false
         })
-    if (exist) {
-        res.json({msg: 'Descrição ou Código já cadastrado'})
-    } else {
-        const category = await Category.create(req.body)
-        res.json({msg:`Categoria ${req.body.description} criada com sucesso`})
+        if (exist) {
+            res.json({ msg: 'Descrição ou Código já cadastrado' })
+        } else {
+            const category = await Category.create(req.body)
+            res.json({ msg: `Categoria ${req.body.description} criada com sucesso` })
+        }
+    } catch (error) {
+        let errorList = error.message
+        errorList = errorList.match(/\<(.*?)\>/mg)
+        res.status(500).send(errorList)
     }
 }
 
@@ -55,6 +75,7 @@ const deleteCategory = async (req, res) => {
 
 module.exports = {
     getCategories,
+    getSingleCategory,
     createCategory,
     updateCategory,
     deleteCategory

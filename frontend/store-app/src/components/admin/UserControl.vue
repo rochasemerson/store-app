@@ -1,56 +1,136 @@
 <template>
   <div class="client-control">
     <form class="form-control">
-      <div class="mb-3" id="InputName">
+      <div class="mb-3" id="InputName" >
         <label for="InputName" class="form-label">Nome</label>
-        <input type="text" class="form-control" v-model="user.name" placeholder="Informe o nome..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="user.name"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o nome..."
+        />
       </div>
       <div class="mb-3" id="InputAddress">
         <label for="InputAddress" class="form-label">Endereço</label>
-        <input type="text" class="form-control" v-model="user.address" placeholder="Informe o endereço..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="user.address"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o endereço..."
+        />
       </div>
       <div class="mb-3" id="InputAddressDetails">
         <label for="InputAddressDetails" class="form-label">Complemento</label>
-        <input type="text" class="form-control" v-model="user.address_detail" placeholder="Informe o complemento..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="user.address_detail"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o complemento..."
+        />
       </div>
       <div class="mb-3" id="InputArea">
         <label for="InputArea" class="form-label">Bairro</label>
-        <input type="text" class="form-control" v-model="user.area" placeholder="Informe o bairro..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="user.area"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o bairro..."
+        />
       </div>
       <div class="mb-3" id="InputCity">
         <label for="InputCity" class="form-label">Cidade</label>
-        <input type="text" class="form-control" v-model="user.city" placeholder="Informe a cidade..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="user.city"
+          :readonly="mode === 'remove'"
+          placeholder="Informe a cidade..."
+        />
       </div>
       <div class="mb-3" id="InputEmail">
         <label for="InputEmail" class="form-label">E-mail</label>
-        <input type="email" class="form-control" v-model="user.email" placeholder="Informe o E-mail..."/>
+        <input
+          type="email"
+          class="form-control"
+          v-model="user.email"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o E-mail..."
+        />
       </div>
       <div class="mb-3" id="InputPhone">
         <label for="InputPhone" class="form-label">Telefone</label>
-        <input type="phone" class="form-control" v-model="user.phone" placeholder="Informe o telefone..."/>
+        <input
+          type="phone"
+          class="form-control"
+          v-model="user.phone"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o telefone..."
+        />
       </div>
       <div class="mb-3" id="InputPassword">
         <label for="InputPassword" class="form-label">Senha</label>
-        <input type="password" class="form-control" v-model="user.password" placeholder="Informe a senha..."/>
+        <input
+          type="password"
+          class="form-control"
+          v-model="user.password"
+          :readonly="mode === 'remove'"
+          placeholder="Informe a senha..."
+        />
       </div>
       <!-- <div class="mb-3" id="InputPasswordConfirmation">
         <label for="InputPasswordConfirmation" class="form-label">Confirme sua senha</label>
         <input type="password" class="form-control"  />
       </div> -->
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="adminCheck" v-model="user.admin"/>
-        <label class="form-check-label" for="adminCheck">Admin</label>
-        <button type="button" class="btn btn-primary me-3" @click="createUser" v-if="mode === 'save'">Enviar</button>
-        <button type="button" class="btn btn-danger me-3" @click="deleteUser" v-if="mode === 'remove'">Excluir</button>
-        <button type="button" class="btn btn-secondary">Cancelar</button>
+      <div class="mb-3 form-check" >
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="adminCheck"
+          v-model="user.admin"
+          v-if="mode === 'save'"
+        />
+        <label class="form-check-label" for="adminCheck" v-if="mode === 'save'">Admin</label>
+        <button
+          type="button"
+          class="btn btn-primary me-3"
+          @click="createUser"
+          v-if="mode === 'save'"
+        >
+          Enviar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning me-3"
+          @click="updateUser"
+          v-if="mode === 'update'"
+        >
+          Atualizar
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger me-3"
+          @click="deleteUser"
+          v-if="mode === 'remove'"
+        >
+          Excluir
+        </button>
+        <button type="button" class="btn btn-secondary" @click="reset">
+          Cancelar
+        </button>
       </div>
+      <div class="mandatory">Items marcados com '*' são obrigatórios</div>
     </form>
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th scope="col">Nome</th>
           <th scope="col">E-mail</th>
           <th scope="col">Telefone</th>
+          <th scope="col">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -65,8 +145,16 @@
             {{ stat[index].phone }}
           </td>
           <td>
-            <i class="fas fa-edit" @click="loadUser(stat[index])"></i>
-            <i class="fas fa-trash" @click="loadUser(stat[index], 'remove')"></i>
+            <div class="wrapper">
+              <div class="icon edit" @click="loadUser(stat[index], 'update')">
+                <div class="tooltip">Editar</div>
+                <span><i class="fas fa-edit"></i></span>
+              </div>
+              <div class="icon delete" @click="loadUser(stat[index], 'remove')">
+                <div class="tooltip">Deletar</div>
+                <span><i class="fas fa-trash"></i></span>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -81,7 +169,7 @@ import { baseApiUrl } from "@/global";
 export default {
   name: "Client Control",
   props: {
-    isActive:String
+    isActive: String,
   },
   data() {
     return {
@@ -98,34 +186,48 @@ export default {
       });
     },
     createUser() {
-      axios.post(`${baseApiUrl}/api/users`, this.user).then((XMLHttpRequest) => {
-        alert(XMLHttpRequest.data);
-      }).catch(XMLHttpRequest => {
-        alert(XMLHttpRequest.response.data);
-      })
+      axios
+        .post(`${baseApiUrl}/api/users`, this.user)
+        .then((XMLHttpRequest) => {
+          alert(XMLHttpRequest.data);
+        })
+        .catch((XMLHttpRequest) => {
+          alert(XMLHttpRequest.response.data);
+        });
     },
-    loadUser(user, mode='save') {
-      this.mode = mode
-      this.user = { ...user }
-      console.log(this.user);
+    loadUser(user, mode = "save") {
+      this.mode = mode;
+      this.user = { ...user };
     },
     reset() {
-      this.mode = 'save'
-      this.user = {}
-      this.loadUsers()
+      this.mode = "save";
+      this.user = {};
+      this.loadUsers();
     },
     deleteUser() {
-      const id = this.user._id
-      axios.delete(`${baseApiUrl}/api/users/${id}`)
+      const id = this.user._id;
+      axios
+        .delete(`${baseApiUrl}/api/users/${id}`)
         .then((XMLHttpRequest) => {
-          alert(XMLHttpRequest.data)
-          console.log(XMLHttpRequest)
-          this.reset()
-        }).catch(XMLHttpRequest => {
-          alert(XMLHttpRequest.response.data)
-          console.log(XMLHttpRequest.response)
+          alert(XMLHttpRequest.data);
+          this.reset();
         })
-    }
+        .catch((XMLHttpRequest) => {
+          alert(XMLHttpRequest.response.data);
+        });
+    },
+    updateUser() {
+      const id = this.user._id;
+      axios
+        .patch(`${baseApiUrl}/api/users/${id}`, this.user)
+        .then((XMLHttpRequest) => {
+          alert(XMLHttpRequest.data);
+          this.reset();
+        })
+        .catch((XMLHttpRequest) => {
+          alert(XMLHttpRequest.response.data);
+        });
+    },
   },
   mounted() {
     this.loadUsers();
@@ -134,9 +236,17 @@ export default {
 </script>
 
 <style>
+.table > tbody, tr {
+  vertical-align: middle;
+  text-align: center;
+}
+
+i {
+  margin: 0;
+}
+
 .nav-item {
   max-width: 500px;
-
 }
 
 .client-control {
@@ -152,12 +262,23 @@ export default {
 
 .form-control > div {
   margin-right: 10px;
-
 }
 
 #InputName,
 #InputAddress {
   grid-column: span 2;
+}
+
+#InputName::before,
+#InputEmail::before,
+#InputPhone::before,
+#InputPassword::before {
+  content: "*";
+}
+
+.mandatory {
+  font-size: 0.6rem;
+  color: gray;
 }
 
 button {
@@ -176,7 +297,81 @@ button {
 }
 
 a.nav-link:active {
-	border-bottom: 1px solid #dee2e6;
-	border-bottom-left-radius: 0.25rem;
+  border-bottom: 1px solid #dee2e6;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.wrapper {
+  display: inline-flex;
+}
+
+.wrapper .icon {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 50%;
+  padding: 15px;
+  margin: 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #ffffff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  background-color: #ffffff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .icon:hover .tooltip {
+  top: -45px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.wrapper .icon:hover span,
+.wrapper .icon:hover .tooltip {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .edit:hover,
+.wrapper .edit:hover .tooltip,
+.wrapper .edit:hover .tooltip::before {
+  background-color: #3b5999;
+  color: #ffffff;
+}
+
+.wrapper .delete:hover,
+.wrapper .delete:hover .tooltip,
+.wrapper .delete:hover .tooltip::before {
+  background-color: #46c1f6;
+  color: #ffffff;
 }
 </style>

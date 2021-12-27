@@ -21,6 +21,7 @@ const productSchema = new mongoose.Schema({
         required: [true, 'Categoria não informada']
     },
     profit: Number,
+    imgUrl: String
 })
 
 productSchema.set('toJSON', {getters: true})

@@ -12,16 +12,16 @@ const createProduct = asyncWrapper(async (req, res) => {
 })
 
 const getSingleProduct = asyncWrapper(async (req, res) => {
-    const { id: productID } = req.params
-    const singleProduct = await Product.findOne({ id:productID })
+    const singleProduct = await Product.findOne({ _id:req.params.id })
     res.status(200).send({singleProduct})
+    console.log(req.params.id);
     if (!singleProduct) {
         res.status(404).send('Nenhum produto encontrado')
     }
 })
 
 const getProductByTag = asyncWrapper(async (req, res) => {
-    const productsByTag = await Product.find({ description: new RegExp(req.query.searchTag, 'i')})
+    const productsByTag = await Product.find({ description: new RegExp(req.query.tag, 'i')})
     res.status(200).send({productsByTag})
     if (productsByTag.length == 0) {
         res.status(404).send('Nenhum produto encontrado')

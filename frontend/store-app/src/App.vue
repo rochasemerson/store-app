@@ -1,7 +1,7 @@
 <template>
-  <div id='app'>
+  <div id='app' class="menu-toggle shown">
     <Header title="Store App" :hideUserDropdown="false"/>
-    <Menu></Menu>
+    <Menu ref="menu" @click="hideShow"></Menu>
     <Content></Content>
     <Footer/>
   </div>
@@ -20,6 +20,11 @@ export default {
     Menu,
     Content,
     Footer
+  },
+  methods: {
+    hideShow () {
+      this.$refs.menu.hideMenu()
+    }
   }
 }
 </script>
@@ -37,10 +42,19 @@ export default {
     height: 100vh;
     display: grid;
     grid-template-rows: 60px 1fr 60px;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 15vw 1fr;
     grid-template-areas: 
       'header header'
       'menu content'
       'menu footer';
   }
+
+  .hidden {
+  transition: ease-in-out, 1s;
+  transform: translateX(-14vw);
+}
+
+.shown {
+  transition: ease-in-out, 1s;
+}
 </style>
