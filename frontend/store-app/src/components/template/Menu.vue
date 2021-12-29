@@ -1,9 +1,5 @@
 <template>
   <aside class="menu">
-    <div class="menu-filter">
-      <i class="fas fa-search me-2"></i>
-      <input type="text" placeholder="Digite para filtrar..." />
-    </div>
     <CategoryList />
     <button class="toggle-btn" v-if="!hidden">
       <i class="fas fa-arrow-circle-right"></i>
@@ -19,11 +15,11 @@ export default {
   components: { CategoryList },
   data() {
     return {
-      hidden: true
+      hidden: true,
     }
   },
   methods: {
-    hideMenu (mode) {
+    hideMenu () {
       const menu = document.getElementsByClassName('menu-toggle')
       menu[0].classList.toggle('hidden')
       this.hidden = !this.hidden
@@ -38,6 +34,7 @@ export default {
   background-color: rgba(205, 213, 219);
 
   display: flex;
+  align-items: center;
   flex-direction: column;
   flex-wrap: wrap;
 }
@@ -71,8 +68,8 @@ export default {
 
 .toggle-btn {
   align-self: flex-end;
-  position: relative;
-  right: -20px;
+  position: fixed;
+  right: -40px;
   border-radius: 50%;
   cursor: pointer;
   background: transparent;

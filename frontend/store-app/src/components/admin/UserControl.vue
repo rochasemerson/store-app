@@ -1,7 +1,8 @@
 <template>
   <div class="client-control">
-    <form class="form-control">
-      <div class="mb-3" id="InputName" >
+    <Error ref="error" />
+    <form class="form-control-user">
+      <div id="InputName" >
         <label for="InputName" class="form-label">Nome</label>
         <input
           type="text"
@@ -11,7 +12,7 @@
           placeholder="Informe o nome..."
         />
       </div>
-      <div class="mb-3" id="InputAddress">
+      <div id="InputAddress">
         <label for="InputAddress" class="form-label">Endereço</label>
         <input
           type="text"
@@ -21,7 +22,7 @@
           placeholder="Informe o endereço..."
         />
       </div>
-      <div class="mb-3" id="InputAddressDetails">
+      <div id="InputAddressDetails">
         <label for="InputAddressDetails" class="form-label">Complemento</label>
         <input
           type="text"
@@ -31,7 +32,7 @@
           placeholder="Informe o complemento..."
         />
       </div>
-      <div class="mb-3" id="InputArea">
+      <div id="InputArea">
         <label for="InputArea" class="form-label">Bairro</label>
         <input
           type="text"
@@ -41,7 +42,7 @@
           placeholder="Informe o bairro..."
         />
       </div>
-      <div class="mb-3" id="InputCity">
+      <div id="InputCity">
         <label for="InputCity" class="form-label">Cidade</label>
         <input
           type="text"
@@ -51,7 +52,7 @@
           placeholder="Informe a cidade..."
         />
       </div>
-      <div class="mb-3" id="InputEmail">
+      <div id="InputEmail">
         <label for="InputEmail" class="form-label">E-mail</label>
         <input
           type="email"
@@ -61,7 +62,7 @@
           placeholder="Informe o E-mail..."
         />
       </div>
-      <div class="mb-3" id="InputPhone">
+      <div id="InputPhone">
         <label for="InputPhone" class="form-label">Telefone</label>
         <input
           type="phone"
@@ -71,7 +72,7 @@
           placeholder="Informe o telefone..."
         />
       </div>
-      <div class="mb-3" id="InputPassword">
+      <div id="InputPassword">
         <label for="InputPassword" class="form-label">Senha</label>
         <input
           type="password"
@@ -81,7 +82,7 @@
           placeholder="Informe a senha..."
         />
       </div>
-      <!-- <div class="mb-3" id="InputPasswordConfirmation">
+      <!-- <div id="InputPasswordConfirmation">
         <label for="InputPasswordConfirmation" class="form-label">Confirme sua senha</label>
         <input type="password" class="form-control"  />
       </div> -->
@@ -96,7 +97,7 @@
         <label class="form-check-label" for="adminCheck" v-if="mode === 'save'">Admin</label>
         <button
           type="button"
-          class="btn btn-primary me-3"
+          class="btn btn-primary me-3 btn-user"
           @click="createUser"
           v-if="mode === 'save'"
         >
@@ -104,7 +105,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-warning me-3"
+          class="btn btn-warning me-3 btn-user"
           @click="updateUser"
           v-if="mode === 'update'"
         >
@@ -112,13 +113,13 @@
         </button>
         <button
           type="button"
-          class="btn btn-danger me-3"
+          class="btn btn-danger me-3 btn-user"
           @click="deleteUser"
           v-if="mode === 'remove'"
         >
           Excluir
         </button>
-        <button type="button" class="btn btn-secondary" @click="reset">
+        <button type="button" class="btn btn-secondary btn-user" @click="reset">
           Cancelar
         </button>
       </div>
@@ -165,12 +166,11 @@
 <script>
 import axios from "axios";
 import { baseApiUrl } from "@/global";
+import Error from '../template/Error'
 
 export default {
   name: "Client Control",
-  props: {
-    isActive: String,
-  },
+  components: { Error },
   data() {
     return {
       mode: "save",
@@ -189,10 +189,11 @@ export default {
       axios
         .post(`${baseApiUrl}/api/users`, this.user)
         .then((XMLHttpRequest) => {
-          alert(XMLHttpRequest.data);
+          this.$refs.error.errorHandler(false, true, XMLHttpRequest.data);
+          this.reset()
         })
         .catch((XMLHttpRequest) => {
-          alert(XMLHttpRequest.response.data);
+          this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
         });
     },
     loadUser(user, mode = "save") {
@@ -209,11 +210,11 @@ export default {
       axios
         .delete(`${baseApiUrl}/api/users/${id}`)
         .then((XMLHttpRequest) => {
-          alert(XMLHttpRequest.data);
+          this.$refs.error.errorHandler(false, true, XMLHttpRequest.data);
           this.reset();
         })
         .catch((XMLHttpRequest) => {
-          alert(XMLHttpRequest.response.data);
+        this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
         });
     },
     updateUser() {
@@ -221,16 +222,17 @@ export default {
       axios
         .patch(`${baseApiUrl}/api/users/${id}`, this.user)
         .then((XMLHttpRequest) => {
-          alert(XMLHttpRequest.data);
+          this.$refs.error.errorHandler(false, true, XMLHttpRequest.data);
           this.reset();
         })
         .catch((XMLHttpRequest) => {
-          alert(XMLHttpRequest.response.data);
+        this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
         });
     },
   },
   mounted() {
     this.loadUsers();
+    console.log(this.$refs.error);
   },
 };
 </script>
@@ -246,16 +248,19 @@ i {
 }
 
 .nav-item {
-  max-width: 500px;
+  width: 10vw;
 }
 
 .client-control {
   position: relative;
-  left: -100px;
   width: 95vw;
+  left: -10vw;
+  padding: 10px;
+  border: 1px solid #dee2e6;
 }
 
-.form-control {
+
+.form-control-user {
   display: grid;
   gap: 10px;
 }
@@ -281,8 +286,9 @@ i {
   color: gray;
 }
 
-button {
+.btn-user {
   width: 20%;
+  margin-top: 10px;
 }
 
 .form-check {

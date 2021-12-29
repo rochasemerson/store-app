@@ -42,4 +42,8 @@ export default {
   justify-content: center;
   margin-top: 5px;
 }
+
+.fa-whatsapp::before {
+  margin-right: 8px;
+}
 </style>

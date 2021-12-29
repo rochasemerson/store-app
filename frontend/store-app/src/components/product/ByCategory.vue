@@ -1,9 +1,13 @@
 <template>
   <div class="products-by-category">
-    <PageTitle icon="fab fa-searchengin me-3"
+    <PageTitle icon="far fa-clone me-3"
       :main="category.description"/>
     <ul>
       <li v-for="product in products" :key="product.id" >
+      <picture>
+        <img :src="product.imgUrl" v-if="product.imgUrl"/>
+        <img src="@/assets/not-found.gif" v-if="!product.imgUrl"/>
+      </picture>
         {{ product.description }}
         {{ product.price }}
       </li>
@@ -39,12 +43,13 @@ export default {
         .get(url).then(res => {
           this.products = res.data.categoryProductList
         })
-    }
+    },
   },
   watch: {
     $route(to) {
       this.category.code = to.params.code
       this.products = []
+      this.filteredProducts = []
       this.page = 1
 
 

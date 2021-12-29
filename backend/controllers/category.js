@@ -12,8 +12,8 @@ const getCategories = async (req, res) => {
 
 const getSingleCategory = async (req, res) => {
     try {
-        const catCode = req.params.code
-        const singleCategory = await Category.findOne({ code: catCode })
+        const catId = req.params.id
+        const singleCategory = await Category.findOne({ _id: CanvasRenderingContext2D })
         if (!singleCategory) {
             res.status(404).json('Categoria não encontrada')
         } else {
@@ -32,10 +32,10 @@ const createCategory = async (req, res) => {
             category.code == req.body.code || category.description == req.body.description ? exist = true : exist = false
         })
         if (exist) {
-            res.json({ msg: 'Descrição ou Código já cadastrado' })
+            res.json('Descrição ou Código já cadastrado')
         } else {
             const category = await Category.create(req.body)
-            res.json({ msg: `Categoria ${req.body.description} criada com sucesso` })
+            res.json(`Categoria ${req.body.description} criada com sucesso`)
         }
     } catch (error) {
         let errorList = error.message
@@ -46,30 +46,28 @@ const createCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
     try {
-        const { id: categoryID } = req.params
-        const category = await Category.findOneAndUpdate({ _id: categoryID }, req.body, {
+        const categoryId = req.params.id
+        const category = await Category.findOneAndUpdate({ _id: categoryId }, req.body, {
             new: true,
             runValidators: true
         })
-        if (!category) {
-            return res.status(404).json({ msg: `Nenhuma categoria encontrada` })
-        }
         res.status(200).send(`Categoria alterada com sucesso`)
     } catch (error) {
-        res.status(500).json({ msg: error.message })
+        res.status(500).json('Ocorreu um erro tente novamente')
+        console.log(req.params);
     }
 }
 
 const deleteCategory = async (req, res) => {
     try {
-        const { id: categoryID } = req.params
-        const category = await Category.findOneAndDelete({ _id: categoryID })
+        const categoryId = req.params.id
+        const category = await Category.findOneAndDelete({ _id: categoryId })
         if (!category) {
-            return res.status(404).json({ msg: `Nenhuma categoria encontrada` })
+            return res.status(404).json(`Nenhuma categoria encontrada`)
         }
-        res.status(200).send(`Categoria ${req.body.description} excluida com sucesso`)
+        res.status(200).send(`Categoria excluida com sucesso`)
     } catch (error) {
-        res.status(500).json({ msg: error.message })
+        res.status(500).json(error.message)
     }
 }
 

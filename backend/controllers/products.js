@@ -6,14 +6,46 @@ const getAllProducts = asyncWrapper(async (req, res) => {
     res.status(200).json({ products })
 })
 
-const createProduct = asyncWrapper(async (req, res) => {
-    const product = await Product.create(req.body)
-    res.status(201).send(`Produto ${req.body.description} criado com sucesso`)
-})
+// const createProduct = async (req, res) => {
+//     try {
+//         const product = await Product.create(req.body)
+//         res.status(201).send(`Produto ${req.body.description} criado com sucesso`)
+
+//     } catch (error) {
+//         if (error.code === 11000) {
+//             return res.status(400).send(`Produto ${error.keyValue.description} já cadastrado`);
+//         } else if (error.name === 'ValidationError') {
+//             return res.status(400).send('Campos Preço, Estoque e Lucro só recebem valores numéricos')
+//         }
+//         let errorList = error.message
+//         errorList = errorList.match(/\<(.*?)\>/mg)
+//         res.status(500).send(errorList)
+//     }
+// }
+
+const createProduct = async (req, res) => {
+    try {
+        const product = await Product.create(req.body)
+        res.status(201).send(`Produto ${req.body.description} criado com sucesso`)
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            let errors = {};
+            
+            Object.keys(error.errors).forEach((key) => {
+                errors[key] = error.errors[key].message;
+            });
+            return res.status(400).send(Object.values(errors));
+        } else if (error.code === 11000) {
+            return res.status(400).send(`Produto ${error.keyValue.description} já cadastrado`);
+        } else {
+            return res.status(400).send('Ocorreu um erro, tente novamente dentro de alguns minutos');
+        }
+    }
+}
 
 const getSingleProduct = asyncWrapper(async (req, res) => {
-    const singleProduct = await Product.findOne({ _id:req.params.id })
-    res.status(200).send({singleProduct})
+    const singleProduct = await Product.findOne({ _id: req.params.id })
+    res.status(200).send({ singleProduct })
     console.log(req.params.id);
     if (!singleProduct) {
         res.status(404).send('Nenhum produto encontrado')
@@ -21,8 +53,8 @@ const getSingleProduct = asyncWrapper(async (req, res) => {
 })
 
 const getProductByTag = asyncWrapper(async (req, res) => {
-    const productsByTag = await Product.find({ description: new RegExp(req.query.tag, 'i')})
-    res.status(200).send({productsByTag})
+    const productsByTag = await Product.find({ description: new RegExp(req.query.tag, 'i') })
+    res.status(200).send({ productsByTag })
     if (productsByTag.length == 0) {
         res.status(404).send('Nenhum produto encontrado')
     }
@@ -43,18 +75,18 @@ const updateProduct = asyncWrapper(async (req, res) => {
         runValidators: true
     })
     if (!product) {
-        return res.status(404).json({ msg: `Nenhum produto com o id: ${productID}` })
+        return res.status(404).json('Nenhum produto encontrado')
     }
-    res.status(200).json({ data: req.body })
+    res.status(200).json(`Produto ${product.description} atualizado com sucesso`)
 })
 
 const deleteProduct = asyncWrapper(async (req, res) => {
     const { id: productID } = req.params
     const product = await Product.findOneAndDelete({ _id: productID })
     if (!product) {
-        return res.status(404).json({ msg: `Nenhum produto com o id: ${productID}` })
+        return res.status(404).json(`Nenhum produto com encontrado`)
     }
-    res.status(200).send(`Produto ${req.body.description} deletado com sucesso`)
+    res.status(200).send(`Produto deletado com sucesso`)
 })
 
 module.exports = {

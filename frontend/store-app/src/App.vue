@@ -1,7 +1,7 @@
 <template>
   <div id='app' class="menu-toggle shown">
     <Header title="Store App" :hideUserDropdown="false"/>
-    <Menu ref="menu" @click="hideShow"></Menu>
+    <Menu ref="menu" @dblclick="hideShow"></Menu>
     <Content></Content>
     <Footer/>
   </div>
@@ -51,7 +51,7 @@ export default {
 
   .hidden {
   transition: ease-in-out, 1s;
-  transform: translateX(-14vw);
+  transform: translateX(-15vw);
 }
 
 .shown {

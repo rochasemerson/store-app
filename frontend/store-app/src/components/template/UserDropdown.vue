@@ -29,14 +29,15 @@ export default {
     }
 
     .user-dropdown:hover {
-        background-color: rgba(13, 61, 112, 0.25);
+        background-color: rgba(19, 95, 175, 0.25);
     }
 
     .user-button {
         display: flex;
         align-items: center;
         height: 100%;
-        margin: 5px;
+        margin-right: 5px;
+        cursor: pointer;
     }
 
     .user-button i {
@@ -45,9 +46,7 @@ export default {
 
     .user-dropdown-content {
         box-sizing: border-box;
-        position: absolute;
-        right: -225px;
-        top: 60px;
+        position: relative;
         min-width: 100px;
         /* min-height: 160px; */
         background-color: #f9f9f9;
@@ -75,7 +74,7 @@ export default {
     }
 
     .user-dropdown-content a:hover {
-      background-color: rgb(244, 240, 236);
+      background-color: rgb(247, 230, 213);
     }
 
     .user-dropdown-content i {

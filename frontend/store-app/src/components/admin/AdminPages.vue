@@ -1,7 +1,7 @@
 <template>
   <div class="admin-pages">
     <PageTitle
-      icon="fa fa-cogs"
+      icon="fa fa-cogs me-3"
       main="Administração do Sistema"
       sub="Cadastros do Sistema"
     />
@@ -16,7 +16,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#" @click="currentTab">Categorias</a>
-        <CategoryControl v-if="isActive=='Categorias'"/>
+        <CategoryControl ref="cat" v-if="isActive=='Categorias'"/>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"
