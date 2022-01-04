@@ -37,7 +37,7 @@ export default {
 <style>
 .error-container {
   position: absolute;
-  top: 50%;
+  top: 15%;
   left: 50%;
   transform: translate(-50%, -50%);
   height: 200px;
@@ -77,7 +77,6 @@ export default {
     flex-grow: 1;
     margin: 10px;
     height: 100px;
-    border: 2px double black;
     font-size: 1rem;
     text-align: center;
     overflow: auto;

@@ -1,57 +1,123 @@
 <template>
   <div class="product-control">
-    <Error  ref="error"/>
+    <Error ref="error" />
     <form class="form-control-product">
-      <div id="InputDescription" >
+      <div id="InputDescription">
         <label for="InputDescription" class="form-label">Descrição</label>
-        <input type="text" class="form-control" v-model="product.description" :readonly="mode === 'remove'" placeholder="Informe a descrição do produto..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="product.description"
+          :readonly="mode === 'remove'"
+          placeholder="Informe a descrição do produto..."
+        />
       </div>
       <div id="InputPrice">
         <label for="InputPrice" class="form-label">Preço</label>
-        <input type="text" class="form-control" v-model="product.price" :readonly="mode === 'remove'" placeholder="Informe o preço..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="product.price"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o preço..."
+          pattern="[0-9]+\.[0-9]+"
+          @keypress="validator"
+        />
       </div>
       <div id="InputStock">
         <label for="InputStock" class="form-label">Estoque</label>
-        <input type="text" class="form-control" v-model="product.stock" :readonly="mode === 'remove'" placeholder="Informe o estoque..."/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="product.stock"
+          :readonly="mode === 'remove'"
+          placeholder="Informe o estoque..."
+          pattern="[0-9]+"
+          @keypress="validator"
+        />
       </div>
       <div id="InputProfit">
         <label for="InputProfit" class="form-label">Lucro</label>
-        <input type="text" class="form-control" v-model="product.profit" :readonly="mode === 'remove'"/>
+        <input
+          type="text"
+          class="form-control"
+          v-model="product.profit"
+          :readonly="mode === 'remove'"
+          pattern="[0-9]+\.[0-9]+"
+          @keypress="validator"
+        />
       </div>
       <div id="InputUrl">
-        <label for="InputUrl" class="form-label">URL da Imagem <i class="fab fa-google search-btn" @click="googleSearch(product.description)"></i></label>
-        <input type="text" class="form-control" v-model="product.imgUrl" :readonly="mode === 'remove'" placeholder="Informe a Url ou use o botão para pesquisar..."/>
+        <label for="InputUrl" class="form-label"
+          >URL da Imagem
+          <i
+            class="fab fa-google search-btn"
+            @click="googleSearch(product.description)"
+          ></i
+        ></label>
+        <input
+          type="text"
+          class="form-control"
+          v-model="product.imgUrl"
+          :readonly="mode === 'remove'"
+          placeholder="Informe a Url ou use o botão para pesquisar..."
+        />
       </div>
       <div id="CategorySelect">
         <label for="CategorySelect" class="form-label">Categoria</label>
-        <select class="form-control" v-model="product.category" :readonly="mode === 'remove'">
-            <option v-for="(category) in categoryList" :key="category.id">
-                {{category.code}}
-                {{category.description}}
-            </option>
+        <select
+          class="form-control"
+          v-model="product.category"
+          :readonly="mode === 'remove'"
+        >
+          <option v-for="category in categoryList" :key="category.id">
+            {{ category.code }}
+            {{ category.description }}
+          </option>
         </select>
       </div>
       <div class="btn-container me-3 mt-2">
-        <button type="button" class="btn btn-primary me-3 btn-product" @click="createProduct" v-if="mode === 'save'">
+        <button
+          type="button"
+          class="btn btn-primary me-3 btn-product"
+          @click="createProduct"
+          v-if="mode === 'save'"
+        >
           Enviar
         </button>
-        <button type="button" class="btn btn-warning me-3 btn-product" @click="updateProduct" v-if="mode === 'update'">
+        <button
+          type="button"
+          class="btn btn-warning me-3 btn-product"
+          @click="updateProduct"
+          v-if="mode === 'update'"
+        >
           Atualizar
         </button>
-        <button type="button" class="btn btn-danger me-3 btn-product" @click="deleteProduct" v-if="mode === 'remove'">
+        <button
+          type="button"
+          class="btn btn-danger me-3 btn-product"
+          @click="deleteProduct"
+          v-if="mode === 'remove'"
+        >
           Excluir
         </button>
-        <button type="button" class="btn btn-secondary btn-product" @click="reset">
+        <button
+          type="button"
+          class="btn btn-secondary btn-product"
+          @click="reset"
+        >
           Cancelar
         </button>
-      <div class="mandatory mt-2">Items marcados com '*' são obrigatórios</div>
+        <div class="mandatory mt-2">
+          Items marcados com '*' são obrigatórios
+        </div>
       </div>
     </form>
     <table class="table table-striped">
       <thead>
         <tr>
           <th scope="col">Descrição</th>
-          <th scope="col">Preço</th>
+          <th scope="col">Preço(R$)</th>
           <th scope="col">Estoque</th>
           <th scope="col">Categoria</th>
           <th scope="col">Ações</th>
@@ -73,11 +139,17 @@
           </td>
           <td>
             <div class="wrapper">
-              <div class="icon edit" @click="loadProduct(products[index], 'update')">
+              <div
+                class="icon edit"
+                @click="loadProduct(products[index], 'update')"
+              >
                 <div class="tooltip">Editar</div>
                 <span><i class="fas fa-edit"></i></span>
               </div>
-              <div class="icon delete" @click="loadProduct(products[index], 'remove')">
+              <div
+                class="icon delete"
+                @click="loadProduct(products[index], 'remove')"
+              >
                 <div class="tooltip">Deletar</div>
                 <span><i class="fas fa-trash"></i></span>
               </div>
@@ -92,7 +164,7 @@
 <script>
 import axios from "axios";
 import { baseApiUrl } from "@/global";
-import Error from '../template/Error'
+import Error from "../template/Error";
 
 export default {
   name: "Product Control",
@@ -102,7 +174,7 @@ export default {
       mode: "save",
       product: {},
       products: [],
-      categoryList: []
+      categoryList: [],
     };
   },
   methods: {
@@ -119,18 +191,25 @@ export default {
       });
     },
     createProduct() {
-        if (this.product.category == undefined) 
-        throw(this.$refs.error.errorHandler(false, true, "Selecione uma categoria"))
-        this.product.category = this.product.category[0]
+      if (this.product.category == undefined)
+        throw this.$refs.error.errorHandler(
+          false,
+          true,
+          "Selecione uma categoria"
+        );
+      this.product.category = this.product.category[0] || '1';
       axios
         .post(`${baseApiUrl}/api/products`, this.product)
         .then((XMLHttpRequest) => {
-        this.$refs.error.errorHandler(false, true, XMLHttpRequest.data);
-        this.reset()
+          this.$refs.error.errorHandler(false, true, XMLHttpRequest.data);
+          this.reset();
         })
         .catch((XMLHttpRequest) => {
-          this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
-          console.log(XMLHttpRequest);
+          this.$refs.error.errorHandler(
+            true,
+            true,
+            XMLHttpRequest.response.data
+          );
         });
     },
     loadProduct(product, mode = "save") {
@@ -151,7 +230,11 @@ export default {
           this.reset();
         })
         .catch((XMLHttpRequest) => {
-          this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
+          this.$refs.error.errorHandler(
+            true,
+            true,
+            XMLHttpRequest.response.data
+          );
         });
     },
     updateProduct() {
@@ -163,23 +246,36 @@ export default {
           this.reset();
         })
         .catch((XMLHttpRequest) => {
-          this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
+          this.$refs.error.errorHandler(
+            true,
+            true,
+            XMLHttpRequest.response.data
+          );
         });
     },
     googleSearch(description) {
-      if (this.product.description == undefined) return
-      window.open("http://www.google.com/search?hl=pt&q=" + escape(description));
- }
+      if (this.product.description == undefined) return;
+      window.open(
+        "http://www.google.com/search?hl=pt&q=" + escape(description)
+      );
+    },
+    validator(value) {
+      let allowedCharacters = ['0','1','2','3','4','5','6','7','8','9','.']
+      if (!allowedCharacters.includes(value.key)) 
+      this.$refs.error.errorHandler(true, true, `${value.key} não é um valor válido`)
+      console.log(value.target);
+    },
   },
   mounted() {
     this.loadProducts();
-    this.loadCategories()
+    this.loadCategories();
   },
 };
 </script>
 
 <style>
-.table > tbody, tr {
+.table > tbody,
+tr {
   vertical-align: middle;
   text-align: center;
 }
@@ -203,11 +299,15 @@ i {
 .form-control-product {
   display: grid;
   grid-template-columns: 50% 50%;
-  gap: 10px
+  gap: 10px;
 }
 
 .form-control > div {
   margin-right: 10px;
+}
+
+.form-control:invalid {
+  border: 2px dotted black;
 }
 
 #InputProfit,
@@ -237,7 +337,8 @@ i {
   cursor: pointer;
   padding: 5px;
   border-radius: 50%;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
 .search-btn:hover {

@@ -65,11 +65,13 @@
       <div id="InputPhone">
         <label for="InputPhone" class="form-label">Telefone</label>
         <input
-          type="phone"
+          type="tel"
           class="form-control"
           v-model="user.phone"
           :readonly="mode === 'remove'"
           placeholder="Informe o telefone..."
+          minlength="9"
+          @keypress="validator"
         />
       </div>
       <div id="InputPassword">
@@ -91,8 +93,11 @@
           type="checkbox"
           class="form-check-input"
           id="adminCheck"
+          name="admin"
+          :value="user.admin"
           v-model="user.admin"
           v-if="mode === 'save'"
+          @change="test"
         />
         <label class="form-check-label" for="adminCheck" v-if="mode === 'save'">Admin</label>
         <button
@@ -229,10 +234,15 @@ export default {
         this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
         });
     },
+    validator(value) {
+      let allowedCharacters = ['0','1','2','3','4','5','6','7','8','9']
+      if (!allowedCharacters.includes(value.key)) {
+        this.$refs.error.errorHandler(true, true, `${value.key} não é um valor válido`)
+        }
+    }
   },
   mounted() {
     this.loadUsers();
-    console.log(this.$refs.error);
   },
 };
 </script>
@@ -267,6 +277,10 @@ i {
 
 .form-control > div {
   margin-right: 10px;
+}
+
+.form-control:invalid {
+  border: 2px dotted black;
 }
 
 #InputName,

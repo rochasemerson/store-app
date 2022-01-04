@@ -1,9 +1,10 @@
 <template>
   <div class="category-control">
+    <Error ref="error"/>
     <form class="form-control-category">
       <div class="mb-3" id="InputCode">
         <label for="InputCode" class="form-label">Código</label>
-        <input type="text" class="form-control" v-model="category.code" :readonly="mode === 'remove'"/>
+        <input type="text" class="form-control" v-model="category.code" :readonly="mode === 'remove'" @keypress="validator"/>
       </div>
       <div class="mb-3" id="InputCategory" >
         <label for="InputCategory" class="form-label">Categoria</label>
@@ -59,12 +60,11 @@
 <script>
 import axios from "axios";
 import { baseApiUrl } from "@/global";
+import Error  from '../template/Error'
 
 export default {
   name: "Category Control",
-  props: {
-    isActive: String,
-  },
+  components: { Error },
   data() {
     return {
       mode: "save",
@@ -122,6 +122,10 @@ export default {
           alert(XMLHttpRequest.response.data);
         });
     },
+    validator(value) {
+      let allowedCharacters = ['0','1','2','3','4','5','6','7','8','9']
+      if (!allowedCharacters.includes(value.key)) this.$refs.error.errorHandler(true, true, `${value.key} não é um valor válido`)
+    }
   },
   mounted() {
     this.loadCategories();

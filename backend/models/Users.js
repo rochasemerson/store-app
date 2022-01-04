@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
         minlength: 12
     },
     password: {
-        type: mongoose.Mixed,
+        type: String,
         required: [true, 'Senha não informada']
     },
     admin: {

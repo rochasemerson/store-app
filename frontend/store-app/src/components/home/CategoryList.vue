@@ -3,7 +3,7 @@
     <div class="menu-filter">
       <i class="fas fa-search me-2"></i>
       <input
-        type="text"
+        type="search"
         placeholder="Digite para filtrar..."
         v-model="filter"
         @change="onTagSearch"
@@ -83,5 +83,9 @@ export default {
 .category-list li::selection {
   background: none;
   width: 90%;
+}
+
+.fa-search {
+  font-size: initial;
 }
 </style>

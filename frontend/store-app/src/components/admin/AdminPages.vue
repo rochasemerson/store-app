@@ -36,6 +36,11 @@ import CategoryControl from "./CategoryControl";
 export default {
   name: "AdminPages",
   components: { PageTitle, ProductControl, UserControl, CategoryControl },
+  data() {
+    return {
+      isActive:'Produtos'
+    }
+  },
   methods: {
     currentTab: function (event) {
       const links = document.getElementsByClassName("nav-link");

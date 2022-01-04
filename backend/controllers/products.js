@@ -2,39 +2,25 @@ const Product = require('../models/Product')
 const asyncWrapper = require('../config/async')
 
 const getAllProducts = asyncWrapper(async (req, res) => {
-    const products = await Product.find({})
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 6
+    const skip = (page - 1) * limit
+    const products = await Product.find({}).skip(skip).limit(limit)
     res.status(200).json({ products })
 })
-
-// const createProduct = async (req, res) => {
-//     try {
-//         const product = await Product.create(req.body)
-//         res.status(201).send(`Produto ${req.body.description} criado com sucesso`)
-
-//     } catch (error) {
-//         if (error.code === 11000) {
-//             return res.status(400).send(`Produto ${error.keyValue.description} já cadastrado`);
-//         } else if (error.name === 'ValidationError') {
-//             return res.status(400).send('Campos Preço, Estoque e Lucro só recebem valores numéricos')
-//         }
-//         let errorList = error.message
-//         errorList = errorList.match(/\<(.*?)\>/mg)
-//         res.status(500).send(errorList)
-//     }
-// }
 
 const createProduct = async (req, res) => {
     try {
         const product = await Product.create(req.body)
         res.status(201).send(`Produto ${req.body.description} criado com sucesso`)
     } catch (error) {
-        if (error.name === 'ValidationError') {
+            if (error.name === 'ValidationError') {
             let errors = {};
             
             Object.keys(error.errors).forEach((key) => {
                 errors[key] = error.errors[key].message;
             });
-            return res.status(400).send(Object.values(errors));
+            return res.status(400).send(Object.values(error));
         } else if (error.code === 11000) {
             return res.status(400).send(`Produto ${error.keyValue.description} já cadastrado`);
         } else {

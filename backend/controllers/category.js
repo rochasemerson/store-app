@@ -3,7 +3,8 @@ const Category = require('../models/Category')
 
 const getCategories = async (req, res) => {
     try {
-        const categoryList = await Category.find({})
+        // const categoryList = await Category.find({}).sort('code').select('code')
+        const categoryList = await Category.find({}).sort('code')
         res.status(200).send({ categoryList })
     } catch (error) {
         res.status(500).json({ msg: error.message })
@@ -12,8 +13,8 @@ const getCategories = async (req, res) => {
 
 const getSingleCategory = async (req, res) => {
     try {
-        const catId = req.params.id
-        const singleCategory = await Category.findOne({ _id: CanvasRenderingContext2D })
+        const catCode = req.params.code
+        const singleCategory = await Category.findOne({ code: catCode })
         if (!singleCategory) {
             res.status(404).json('Categoria não encontrada')
         } else {
@@ -46,8 +47,8 @@ const createCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
     try {
-        const categoryId = req.params.id
-        const category = await Category.findOneAndUpdate({ _id: categoryId }, req.body, {
+        const catCode = req.params.code
+        const category = await Category.findOneAndUpdate({ code: catCode }, req.body, {
             new: true,
             runValidators: true
         })

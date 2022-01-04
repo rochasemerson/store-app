@@ -1,7 +1,7 @@
 <template>
   <div id='app' class="menu-toggle shown">
     <Header title="Store App" :hideUserDropdown="false"/>
-    <Menu ref="menu" @dblclick="hideShow"></Menu>
+    <Menu ref="menu" @contextmenu.prevent="hideShow"></Menu>
     <Content></Content>
     <Footer/>
   </div>

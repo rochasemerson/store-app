@@ -1,65 +1,49 @@
 <template>
-  <div class="homeProduct">
-    <div class="picture">
-      <picture>
-        <img :src="picture_url" v-if="(picture_url)"/>
-        <img src="@/assets/not-found.gif" alt="not-found" v-if="(!picture_url)">
-      </picture>
-    </div>
-    <div class="product-info">
-      <span class="product-name">{{ name }}</span>
-      <span class="product-price">{{ price }}</span>
-    </div>
+  <div class="card-home">
+  <img :src="imgUrl" v-if="imgUrl" class="card-img" alt="not-found">
+  <img src="@/assets/not-found.gif" v-if="!imgUrl" class="card-img" alt="not-found">
+  <div class="card-body">
+    <h5 class="card-title">{{price}}</h5>
+    <p class="card-text">{{name}}</p>
+    <a href="#" class="btn btn-primary"><i class="fas fa-cart-plus me-2"></i>Adicionar</a>
   </div>
+</div>
 </template>
 
 <script>
 export default {
   name: "HomeProducts",
-  props: ["name", "price", "picture_url"],
+  props: ["name", "price", 'imgUrl'],
 }
 </script>
 
 <style>
-    .homeProduct {
-        display: grid;
-        grid-template-columns: 30% 70%;
-        grid-template-rows: 70% 30%;
-        grid-template-areas: 
-        'picture description'
-        'picture price';
-        min-width: 30vw;
-        min-height: 30vh;
-        margin: 25px;
-    }
-
-    .picture img {
-        grid-area: picture;
-        height: 100%;
-        max-height: 250px;
-        width: 100%;
-        max-width: 250px;
-    }
-
-    .product-info {
+    .card-home {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      flex-basis: 100%;
     }
 
-    .product-name {
-        grid-area: description;
-        font-size: 2.5rem;
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .product-price {
-        grid-area: price;
-        font-size: 2rem;
+    .card-img {
+      height: 40%;
+      max-height: 15rem;
     }
 
-    .product-price::before {
+    .card-title,
+    .card-text {
+      text-align: center;
+    }
+
+    .card-title::before {
       content: 'R$';
-      margin-right: 10px;
+      margin-right: 0.75rem;
     }
+
 </style>

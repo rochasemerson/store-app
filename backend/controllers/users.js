@@ -1,4 +1,9 @@
 const User = require('../models/Users')
+const jwt = require('jwt-simple')
+const bcrypt = require('bcrypt')
+
+require('dotenv').config()
+
 
 const getAllUsers = async (req, res) => {
     try {
@@ -9,16 +14,54 @@ const getAllUsers = async (req, res) => {
     }
 }
 
-const getSingleUser = async (req, res) => {
+const signIn = async (req, res) => {
     try {
-        const { id: userID } = req.params
-        const singleUser = await User.findOne({ id: userID })
-        if (!singleUser) {
-            res.status(404).send(`Nenhum usuário com o id: ${userID} encontrado`)
+        if (!req.body.email || !req.body.password) {
+            return res.status.send('Usuário ou senha não informados!')
+            console.log('1');
         }
+        const user = await User.findOne({email: req.body.email})
+        if (!user) res.status(400).send('Usuário não encontrado!')
+        console.log('2');
+
+        const isMatch = bcrypt.compare(req.body.password, user.password)
+        if(!isMatch) return res.status(401).send('E-mail ou senha inválidos!')
+        console.log('3');
+
+        const now = Math.floor(Date.now() / 1000)
+
+        const payLoad = {
+            name: user.name,
+            email: user.email,
+            admin: user.admin,
+            iat: now,
+            exp: now + (3600 * 72)
+        }
+
+        res.json({
+            ...payLoad,
+            token: jwt.encode(payLoad, process.env.AUTH_SECRET)
+        })
     } catch (error) {
         res.status(500).send(error)
+        console.log(process.env.AUTH_SECRET, payLoad);
     }
+}
+
+const validateToken = async (req, res) => {
+    const userData = req.body || null
+    try {
+        if(userData) {
+            const token = jwt.decode(userData.token, authSecret)
+            if(new Date(token.exp * 1000) > new Date()) {
+                return res.send(true)
+            }
+        }
+    } catch (error) {
+        // problema com o token
+    }
+
+    res.send(false)
 }
 
 const getUsersByTag = async (req, res) => {
@@ -39,9 +82,7 @@ const createUser = async (req, res) => {
         res.status(200).send(`Usuário ${req.body.name} cadastrado(a) com sucesso`)
     }
     catch (error) {
-        if (error.name === "ValidationError" && error.errors.phone.valueType == 'string') {
-            return res.status(400).send('Telefone Inválido');
-        } else if (error.name === "ValidationError" ) {
+        if (error.name === "ValidationError" ) {
             let errors = {};
 
             Object.keys(error.errors).forEach((key) => {
@@ -88,7 +129,8 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
     getAllUsers,
-    getSingleUser,
+    signIn,
+    validateToken,
     getUsersByTag,
     createUser,
     updateUser,

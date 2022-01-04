@@ -16,6 +16,7 @@ export default {
 <style>
     .page-title {
         grid-area: title;
+        width: 100%;
     }
 
     .page-title h1 {
