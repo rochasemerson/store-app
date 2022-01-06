@@ -7,11 +7,11 @@
     />
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link active" href="#" @click="currentTab">Produtos</a>
+        <a class="nav-link " href="#" @click="currentTab">Produtos</a>
         <ProductControl v-if="isActive=='Produtos'"/>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" @click="currentTab">Usuários</a>
+        <a class="nav-link active" href="#" @click="currentTab">Usuários</a>
         <UserControl v-if="isActive=='Usuários'"/>
       </li>
       <li class="nav-item">
@@ -38,7 +38,7 @@ export default {
   components: { PageTitle, ProductControl, UserControl, CategoryControl },
   data() {
     return {
-      isActive:'Produtos'
+      isActive:'Usuários'
     }
   },
   methods: {

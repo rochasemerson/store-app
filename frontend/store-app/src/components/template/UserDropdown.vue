@@ -2,20 +2,39 @@
   <div class="user-dropdown">
     <div class="user-button">
       <i class="fas fa-users-cog"></i>  
-      <span>Usuário</span>
+      <span>{{user.name || 'Usuário'}}</span>
       <div class="user-dropdown-img"></div>
       <i class="fa fa-angle-down"></i>
     </div>
     <div class="user-dropdown-content">
-        <router-link to="/admin"><i class="fas fa-user"></i>Login</router-link>
-        <a href=""><i class="fas fa-sign-out-alt"></i>Sair</a>
+        <router-link :to="user.admin == true ? '/admin' : '/auth'"><i class="fas fa-user"></i>Login</router-link>
+        <a href="" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i>Sair</a>
     </div>
   </div>
 </template>
 
 <script>
+import store from '@/main.js'
+import { userKey } from '@/global'
+
 export default {
   name: "UserDropdown",
+  data() {
+    return {
+      user: {}
+    }
+  },
+  methods:{
+      logout() {
+        localStorage.removeItem(userKey)
+        store.user = {}
+        this.$router.push({path: '/'})
+      }
+    },
+  mounted() {
+    if (store) this.user = store.user
+    console.log(store);
+  }
 }
 </script>
 

@@ -4,6 +4,7 @@ import Home from '@/components/home/Home'
 import AdminPages from '@/components/admin/AdminPages'
 import ByCategory from '@/components/product/ByCategory'
 import ByTag from '@/components/product/ByTag'
+import Auth from '@/components/auth/Auth'
 
 
 const routes = [{
@@ -22,6 +23,10 @@ const routes = [{
     name: 'byTag',
     path: '/category/search/:tag',
     component: ByTag
+}, {
+    name: 'auth',
+    path: '/auth',
+    component: Auth
 }]
 
 const router = createRouter ({

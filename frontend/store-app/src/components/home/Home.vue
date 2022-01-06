@@ -17,7 +17,6 @@ import HomeProducts from './HomeProducts'
 import axios from 'axios'
 import { baseApiUrl} from '@/global'
 
-
 export default {
     name: 'Home',
     components: { PageTitle, HomeProducts },

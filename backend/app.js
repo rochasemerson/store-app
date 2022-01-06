@@ -5,11 +5,14 @@ const connectDB = require('./db/connect')
 const products = require('./routes/products')
 const categories = require('./routes/categories')
 const users = require('./routes/users')
+const passport = require('passport')
+
 require('dotenv').config()
 
 // middlewares
 app.use(express.json())
 app.use(cors())
+app.use(passport.initialize())
 
 // routes
 app.use('/api/products', products)

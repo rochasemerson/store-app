@@ -17,16 +17,13 @@ const getAllUsers = async (req, res) => {
 const signIn = async (req, res) => {
     try {
         if (!req.body.email || !req.body.password) {
-            return res.status.send('Usuário ou senha não informados!')
-            console.log('1');
+            return res.status(400).send('Usuário ou senha não informados!')
         }
         const user = await User.findOne({email: req.body.email})
-        if (!user) res.status(400).send('Usuário não encontrado!')
-        console.log('2');
+        if (!user) return res.status(400).send('Usuário não encontrado!')
 
         const isMatch = bcrypt.compare(req.body.password, user.password)
         if(!isMatch) return res.status(401).send('E-mail ou senha inválidos!')
-        console.log('3');
 
         const now = Math.floor(Date.now() / 1000)
 
@@ -44,7 +41,6 @@ const signIn = async (req, res) => {
         })
     } catch (error) {
         res.status(500).send(error)
-        console.log(process.env.AUTH_SECRET, payLoad);
     }
 }
 

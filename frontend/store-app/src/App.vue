@@ -1,9 +1,9 @@
 <template>
   <div id='app' class="menu-toggle shown">
-    <Header title="Store App" :hideUserDropdown="false"/>
-    <Menu ref="menu" @contextmenu.prevent="hideShow"></Menu>
+    <Header title="Store App" :hideUserDropdown="false" v-if="!signin"/>
+    <Menu ref="menu" @contextmenu.prevent="hideShow" v-if="!signin"></Menu>
     <Content></Content>
-    <Footer/>
+    <Footer v-if="!signin"/>
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
     Menu,
     Content,
     Footer
+  },
+  data() {
+    return {
+      signin: false
+    }
   },
   methods: {
     hideShow () {

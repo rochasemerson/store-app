@@ -196,6 +196,7 @@ export default {
         .then((XMLHttpRequest) => {
           this.$refs.error.errorHandler(false, true, XMLHttpRequest.data);
           this.reset()
+          this.$router.push({path: '/'})
         })
         .catch((XMLHttpRequest) => {
           this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);
