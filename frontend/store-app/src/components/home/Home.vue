@@ -16,6 +16,7 @@ import PageTitle from '../template/PageTitle'
 import HomeProducts from './HomeProducts'
 import axios from 'axios'
 import { baseApiUrl} from '@/global'
+import store from '@/main.js'
 
 export default {
     name: 'Home',
@@ -29,10 +30,18 @@ export default {
         getProductInfo() {
             axios.get(`${baseApiUrl}/api/products?limit=8`)
                 .then(res => this.stat = (res.data.products))
+    },
+    addToCart (name, price) {
+        store.currentUser.cart.push({
+        productName: name,
+        productPrice: price
+      })
+      console.log(store);
     }
 },
     mounted() {
         this.getProductInfo()
+        store.currentUser.cart = []
     }
 }
 </script>

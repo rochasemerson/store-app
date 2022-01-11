@@ -38,7 +38,7 @@ export default {
   components: { PageTitle, ProductControl, UserControl, CategoryControl },
   data() {
     return {
-      isActive:'Usuários'
+      isActive:'Usuários',
     }
   },
   methods: {

@@ -8,6 +8,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { baseApiUrl, userKey } from '@/global'
+import store from '@/main.js'
 import Header from '@/components/template/Header'
 import Menu from '@/components/template/Menu'
 import Content from '@/components/template/Content'
@@ -23,13 +26,39 @@ export default {
   },
   data() {
     return {
-      signin: false
+      signin: false,
+      validatingToken: true
     }
   },
   methods: {
     hideShow () {
       this.$refs.menu.hideMenu()
+    },
+    async validateToken() {
+      this.validatingToken = true
+
+      const json = localStorage.getItem(userKey)
+      const userData = JSON.parse(json)
+      store.currentUser = {}
+
+      if(!userData) {
+        this.validatingToken = false
+        return
+      }
+
+      const res = await axios.post(`${baseApiUrl}/api/users/validateToken`, userData)
+
+      if (res.data) {
+        store.currentUser = userData
+      } else {
+        localStorage.removeItem(userKey)
+      }
+
+      this.validatingToken = false
     }
+  },
+  created() {
+    this.validateToken()
   }
 }
 </script>

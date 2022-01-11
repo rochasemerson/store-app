@@ -39,7 +39,7 @@ export default {
         signIn() {
             const url = `${baseApiUrl}/api/users/signin`
             axios.post(url, this.user).then(XMLHttpRequest => {
-                store.user = XMLHttpRequest.data
+                store.currentUser = XMLHttpRequest.data
                 localStorage.setItem(userKey, JSON.stringify(XMLHttpRequest.data))
                 this.$router.push({path: '/'})
                 this.$root.$data.signin = false
@@ -67,13 +67,6 @@ export default {
 </script>
 
 <style>
-    /* .auth-content {
-        position: absolute;
-        top: 15%;
-        left: 50%;
-        transform: translateX(-50%);
-    } */
-
     .auth-title {
         font-size: 2rem;
         font-weight: bolder;
@@ -81,6 +74,10 @@ export default {
     }
 
     .auth-modal {
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        transform: translateX(-50%);
         background-color: #fff;
         width: 350px;
         padding: 20px;

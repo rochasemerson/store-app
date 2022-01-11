@@ -8,7 +8,7 @@ import router from './config/router'
 const store = {
     debug: true,
     state: reactive({
-        user: {}
+        currentUser: {}
     })
 }
 

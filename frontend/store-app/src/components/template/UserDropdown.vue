@@ -2,12 +2,13 @@
   <div class="user-dropdown">
     <div class="user-button">
       <i class="fas fa-users-cog"></i>  
-      <span>{{user.name || 'Usuário'}}</span>
+      <span>{{user.name ?? 'Usuário'}}</span>
       <div class="user-dropdown-img"></div>
       <i class="fa fa-angle-down"></i>
     </div>
     <div class="user-dropdown-content">
-        <router-link :to="user.admin == true ? '/admin' : '/auth'"><i class="fas fa-user"></i>Login</router-link>
+        <router-link to='/admin' v-if="user.admin">Administração</router-link>
+        <router-link to="/auth" v-else><i class="fas fa-user"></i>Login</router-link>
         <a href="" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i>Sair</a>
     </div>
   </div>
@@ -27,13 +28,13 @@ export default {
   methods:{
       logout() {
         localStorage.removeItem(userKey)
+        this.user = {}
         store.user = {}
         this.$router.push({path: '/'})
       }
     },
   mounted() {
-    if (store) this.user = store.user
-    console.log(store);
+    this.user = store.currentUser
   }
 }
 </script>

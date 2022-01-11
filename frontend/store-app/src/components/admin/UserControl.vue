@@ -96,10 +96,10 @@
           name="admin"
           :value="user.admin"
           v-model="user.admin"
-          v-if="mode === 'save'"
+          v-if="mode === 'save' && currentUser.admin == true"
           @change="test"
         />
-        <label class="form-check-label" for="adminCheck" v-if="mode === 'save'">Admin</label>
+        <label class="form-check-label" for="adminCheck" v-if="mode === 'save' && currentUser.admin == true">Admin</label>
         <button
           type="button"
           class="btn btn-primary me-3 btn-user"
@@ -130,7 +130,7 @@
       </div>
       <div class="mandatory">Items marcados com '*' são obrigatórios</div>
     </form>
-    <table class="table table-striped">
+    <table class="table table-striped" v-if="currentUser.admin">
       <thead>
         <tr>
           <th scope="col">Nome</th>
@@ -172,6 +172,7 @@
 import axios from "axios";
 import { baseApiUrl } from "@/global";
 import Error from '../template/Error'
+import store from '@/main.js'
 
 export default {
   name: "Client Control",
@@ -180,7 +181,8 @@ export default {
     return {
       mode: "save",
       user: {},
-      stat: [],
+      currentUser: {},
+      stat: []
     };
   },
   methods: {
@@ -244,6 +246,8 @@ export default {
   },
   mounted() {
     this.loadUsers();
+    this.currentUser = store.currentUser
+    console.log(this.currentUser);
   },
 };
 </script>
