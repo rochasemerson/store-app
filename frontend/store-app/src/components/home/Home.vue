@@ -31,17 +31,16 @@ export default {
             axios.get(`${baseApiUrl}/api/products?limit=8`)
                 .then(res => this.stat = (res.data.products))
     },
-    addToCart (name, price) {
+    addToCart (name, price, productQuantity = 0) {
         store.currentUser.cart.push({
         productName: name,
-        productPrice: price
+        productPrice: price,
+        productQuantity: productQuantity += 1
       })
-      console.log(store);
     }
 },
     mounted() {
         this.getProductInfo()
-        store.currentUser.cart = []
     }
 }
 </script>

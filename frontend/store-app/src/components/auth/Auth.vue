@@ -1,8 +1,7 @@
 <template>
     <div class="auth-content">
         <Error ref="error"/>
-        <UserControl v-if="showSignup"/>
-        <div class="auth-modal" v-if="!showSignup">
+        <div class="auth-modal">
             <div class="auth-title">Login</div>
             <label for="user">Usuário</label>
             <input type="text" v-model="user.email" placeholder="Digite o e-mail">
@@ -12,7 +11,7 @@
                 <i class="fas fa-sign-in-alt"></i>
                 Entrar
             </button>
-            <a href="" @click.prevent="showSignup = !showSignup">
+            <a href="/" @click.prevent="signUp" >
                 <span>Novo usuário? Cadastre-se aqui!</span>
             </a>
         </div>
@@ -22,16 +21,14 @@
 <script>
 import { baseApiUrl, userKey} from '@/global'
 import Error from '../template/Error'
-import UserControl from '../admin/UserControl'
 import axios from 'axios'
 import store from '@/main.js'
 
 export default {
     name: 'Auth',
-    components:  { Error, UserControl },
+    components:  { Error },
     data() {
         return {
-            showSignup: false,
             user: {}
         }
     },
@@ -49,15 +46,8 @@ export default {
             })
         },
         signUp() {
-            const url = `${baseApiUrl}/api/users/signup`
-            axios.post(url, this.user)
-            .then(() => {
-                this.$refs.error.errorHandler(false, true, '')
-                this.user = {}
-                this.showSignup = false
-            }).catch(error => {
-                this.$refs.error.errorHandler(true, true, error)
-            })
+                this.$router.push({path: '/signup'})
+                this.$root.$data.signin = true
         }
     },
     mounted(){

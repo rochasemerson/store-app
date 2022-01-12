@@ -9,6 +9,7 @@
     <div class="user-dropdown-content">
         <router-link to='/admin' v-if="user.admin">Administração</router-link>
         <router-link to="/auth" v-else><i class="fas fa-user"></i>Login</router-link>
+        <router-link to='/cart' ><i class="fas fa-shopping-cart"></i>Carrinho</router-link>
         <a href="" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i>Sair</a>
     </div>
   </div>
@@ -29,7 +30,7 @@ export default {
       logout() {
         localStorage.removeItem(userKey)
         this.user = {}
-        store.user = {}
+        store.currentUser = {}
         this.$router.push({path: '/'})
       }
     },

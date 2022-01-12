@@ -59,6 +59,7 @@ export default {
   },
   created() {
     this.validateToken()
+    store.currentUser.cart = []
   }
 }
 </script>

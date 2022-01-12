@@ -198,7 +198,9 @@ export default {
         .then((XMLHttpRequest) => {
           this.$refs.error.errorHandler(false, true, XMLHttpRequest.data);
           this.reset()
-          this.$router.push({path: '/'})
+          setTimeout(() => {
+            this.$router.push({path: '/auth'})
+          }, 5000);
         })
         .catch((XMLHttpRequest) => {
           this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data);

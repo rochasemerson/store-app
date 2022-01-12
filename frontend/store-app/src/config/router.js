@@ -2,7 +2,9 @@ import {createWebHistory, createRouter} from 'vue-router'
 
 import Home from '@/components/home/Home'
 import AdminPages from '@/components/admin/AdminPages'
+import UserControl from '@/components/admin/UserControl'
 import ByCategory from '@/components/product/ByCategory'
+import ShoppingCart from '@/components/product/ShoppingCart'
 import ByTag from '@/components/product/ByTag'
 import Auth from '@/components/auth/Auth'
 import {userKey} from '@/global'
@@ -31,6 +33,14 @@ const routes = [{
     name: 'auth',
     path: '/auth',
     component: Auth
+}, {
+    name: 'signup',
+    path: '/signup',
+    component: UserControl
+}, {
+    name: 'cart',
+    path: '/cart',
+    component: ShoppingCart
 }]
 
 const router = createRouter ({
