@@ -35,12 +35,13 @@ export default {
     methods:{
         signIn() {
             const url = `${baseApiUrl}/api/users/signin`
+            const cart = store.currentUser.cart
             axios.post(url, this.user).then(XMLHttpRequest => {
                 store.currentUser = XMLHttpRequest.data
+                store.currentUser.cart = cart
                 localStorage.setItem(userKey, JSON.stringify(XMLHttpRequest.data))
                 this.$router.push({path: '/'})
                 this.$root.$data.signin = false
-                this.$refs.error.errorHandler(false, true, XMLHttpRequest.data)
             }).catch(XMLHttpRequest => {
                 this.$refs.error.errorHandler(true, true, XMLHttpRequest.response.data)
             })

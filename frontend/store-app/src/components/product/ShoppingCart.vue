@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Page-title icon='fas fa-shopping-cart me-3' main='Carrinho'/>
+        <Page-title icon='fas fa-shopping-cart me-3' main='Carrinho' :sub="user.name ?? ''"/>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -12,14 +12,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item) in cart" :key="item.name">
+                <tr v-for="(item, index) in cart" :key="item.name">
                     <td>{{item.productName}}</td>
                     <td class="price">{{item.productPrice}}</td>
-                    <td class="price">{{totalProductPrice}}</td>
-                    <td><input type="number" min="1"></td>
+                    <td class="price Total">{{(item.productPrice * item.productQuantity).toFixed(2)}}</td>
+                    <td><input type="number" min="1" v-model="item.productQuantity"></td>
                     <td>
                         <div class="wrapper">
-                          <div class="icon delete" @click="removeItem(item)">
+                          <div class="icon delete" @click="removeItem(index)">
                             <div class="tooltip">Remover</div>
                             <span><i class="fas fa-trash"></i></span>
                           </div>
@@ -27,7 +27,7 @@
                     </td>
                 </tr>
             </tbody>
-            <div class="total">{{totalCart}}</div>
+            <div class="total">{{cart}}</div>
         </table>
     </div>
 </template>
@@ -46,15 +46,8 @@ export default {
         }
     },
     methods: {
-        removeItem(target) {
-            console.log(target, this.cart);
-        }
-    },
-    computed: {
-        cartTotal() {
-            return this.cart.reduce((acumulator, productPrice) => {
-                acumulator = acumulator + productPrice
-            })
+        removeItem(index) {
+            this.cart.splice(index, 1)
         }
     }
 }
